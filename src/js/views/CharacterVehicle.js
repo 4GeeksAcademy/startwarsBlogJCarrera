@@ -6,6 +6,7 @@ const CharacterVehicle = ({url}) => {
   const params = useParams();
   const [data, setData] = useState({});
   const { store } = useContext(Context);
+  const id = url.match(/\d+/);
 
   useEffect(() => {
     async function fetchData() {
@@ -22,7 +23,10 @@ const CharacterVehicle = ({url}) => {
 
 
   return (
-     <div>{data.name}</div>
+    <div className="detailContainer m-3">
+      <img className="img img-round w-100" src={`https://starwars-visualguide.com/assets/img/vehicles/${id}.jpg`} />
+      <div className="text-center">{data.name}</div>
+     </div>
   );
 };
 

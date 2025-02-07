@@ -22,9 +22,9 @@ const CharacterFilm = ({url}) => {
 
 
   return (
-     <div>
-      {data.title}
-      <img src={`https://starwars-visualguide.com/assets/img/films/${id}.jpg`} />
+     <div className="detailContainer m-3">
+      <img className="img img-round w-100" src={`https://starwars-visualguide.com/assets/img/films/${id}.jpg`} />
+      <div className="text-center">{data.title}</div>
      </div>
   );
 };

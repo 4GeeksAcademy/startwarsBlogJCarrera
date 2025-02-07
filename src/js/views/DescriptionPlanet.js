@@ -1,29 +1,49 @@
-import React, { useContext } from "react";
+import React, { useContext, useState ,useEffect} from "react";
 import { Context } from "../store/appContext";
 import { useParams } from "react-router";
+import CharacterFilm from "./CharacterFilm";
 
 const DescriptionPlanet = () => {
   const params = useParams();
   const { store } = useContext(Context);
-  const descriptionPlanet = store.planets.find(
-    (item) => item.uid == params.id
-  );
-  
+  // const descriptionPlanet = store.planets.find(
+  //   (item) => item.uid == params.id
+  // );
+    const [descriptionPlanet, setDescriptionPlanet] = useState({});
+    const placeholderImage =
+    "https://starwars-visualguide.com/assets/img/placeholder.jpg";
+
+ useEffect(() => {
+    async function fetchData() {
+
+      const characterBasicInfo = store.characters.find(
+        (item) => item.uid == params.id
+      );
+
+      
+      const response = await fetch("https://swapi.dev/api/planets/" + params.id);
+      if (response.ok) {
+        const data = await response.json();
+        setDescriptionPlanet( data );
+      }
+    }
+    fetchData();
+  }, []);
+
+
+  function handleImageError(e) {
+    e.target.src = placeholderImage;
+  }
 
   return (
     <div className="container bg-dark mt-3 px-0">
       <div className="row">
         <div className="container col-md-4">
           <img
-            src={
-              descriptionPlanet.name == "Tatooine"
-                ? `https://oyster.ignimgs.com/mediawiki/apis.ign.com/star-wars-episode-7/4/4b/Tatooine-3.jpg?width=800`
-                : `https://starwars-visualguide.com/assets/img/planets/${
-                    descriptionPlanet.uid
-                  }.jpg`
-            }
+            src={`https://starwars-visualguide.com/assets/img/planets/${params.id}.jpg` || placeholderImage}
             className="container img-fluid"
             alt="..."
+            onError={handleImageError}
           />
         </div>
         <div className="container col-md-8">
@@ -80,31 +100,21 @@ const DescriptionPlanet = () => {
             </div>
           </div>
           <div className="container row mt-4">
-            {descriptionPlanet.residents != "" && (
-              <ul className="col-md-5 text-white list-unstyled">
-                Residents:
-                {descriptionPlanet.residents.map((resident) => {
-                  return (
-                    <li className="text-secondary" key={resident}>
-                      {resident}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-
-            {descriptionPlanet.films != "" && (
-              <ul className="col-md-5 text-white list-unstyled">
-                Films:
+          {descriptionPlanet.films?.length && (
+              <ul className="container col text-white list-unstyled">
+                films:
+                
                 {descriptionPlanet.films.map((film) => {
+                  
                   return (
-                    <li key={film} className="text-secondary">
-                      {film}
+                    <li className="text-secondary" key={film}>
+                      <CharacterFilm url={film}  />
                     </li>
                   );
                 })}
               </ul>
             )}
+            
           </div>
         </div>
       </div>
