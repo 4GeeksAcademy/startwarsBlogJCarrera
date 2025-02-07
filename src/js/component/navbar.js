@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import logoStarWars from "../../img/rigo-baby.jpg";
+import logoStarWars from "../../img/startwars.jpeg";
 import { Context } from "../store/appContext";
 
 export const Navbar = () => {
